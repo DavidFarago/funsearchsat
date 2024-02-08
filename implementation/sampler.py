@@ -17,20 +17,33 @@
 from collections.abc import Collection, Sequence
 
 import numpy as np
-
+from llama_cpp import Llama
 from funsearch.implementation import evaluator
 from funsearch.implementation import programs_database
 
 
+CTX = 2048
+
 class LLM:
-  """Language model that predicts continuation of provided source code."""
+  """Language model (see https://huggingface.co/TheBloke/phi-2-GGUF) that predicts continuation of provided source code."""
 
   def __init__(self, samples_per_prompt: int) -> None:
     self._samples_per_prompt = samples_per_prompt
+    self.llm = Llama(
+      model_path="./phi-2.Q4_K_M.gguf",  # Download the model file first, "phi-2.Q4_K_M.gguf" is "medium, balanced quality - recommended"
+      n_ctx=CTX,  # The max sequence length to use - note that longer sequence lengths require much more resources
+      n_threads=8,            # The number of CPU threads to use, tailor to your system and the resulting performance
+      n_gpu_layers=35         # The number of layers to offload to GPU, if you have GPU acceleration available. Set to 0 if no GPU acceleration
+    )
 
   def _draw_sample(self, prompt: str) -> str:
     """Returns a predicted continuation of `prompt`."""
-    raise NotImplementedError('Must provide a language model.')
+    return self.llm(
+      "Instruct: {prompt}\nOutput:", 
+      max_tokens=CTX // 3,
+      stop=["<|endoftext|>"],
+      echo=False,
+    )
 
   def draw_samples(self, prompt: str) -> Collection[str]:
     """Returns multiple predicted continuations of `prompt`."""

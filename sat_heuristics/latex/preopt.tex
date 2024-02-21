@@ -1,0 +1,257 @@
+\documentclass{article}
+
+\usepackage{hyperref}
+
+\begin{document}
+
+\title{CaDiCaL Options}
+%\author{Your Name}
+\date{}
+
+\maketitle
+
+Checkout: \url{https://github.com/arminbiere/cadical}
+
+\section{Basic Options}
+
+\begin{verbatim}
+    ./cadical -P5 -d 0 -o out.cnf in.cnf
+\end{verbatim}
+
+\begin{itemize}
+    \item \texttt{-P\#}: Set the number of preprocessing rounds (default: 0), =outer loop, Note: no space between \texttt{-P} and the number
+    \item \texttt{-d 0}: Set the maximum number of decisions to \texttt{0}, =preprocessing only
+    \item \texttt{-o out.cnf}: Write the result to \texttt{out.cnf}, =preprocessed formula
+    \item \texttt{in.cnf}: The input file
+\end{itemize}
+
+\section{Preprocessing Options}
+
+Separate name and value by '='
+
+\subsection{Blocked Clause Elimination}
+% OPTION( block,             0,  0,  1,0,1,1, "blocked clause elimination") \
+% OPTION( blockmaxclslim,  1e5,  1,2e9,2,0,1, "maximum clause size") \
+% OPTION( blockminclslim,    2,  2,2e9,0,0,1, "minimum clause size") \
+% OPTION( blockocclim,     1e2,  1,2e9,2,0,1, "occurrence limit") \
+\begin{tabular}{l|rrr}
+    Option & Default & Min & Max \\
+    \hline
+    \texttt{--block}          & $0$    & $0$  & $1$ \\
+    \texttt{--blockmaxclslim} & $10^5$ & $1$  & $2 \cdot 10^9$ \\
+    \texttt{--blockminclslim} & $2$    & $2$  & $2 \cdot 10^9$ \\
+    \texttt{--blockocclim}    & $100$  & $1$  & $2 \cdot 10^9$ \\    
+\end{tabular}
+
+\subsection{Compacting}
+% OPTION( compact,           1,  0,  1,0,1,1, "compact internal variables") \
+% OPTION( compactint,      2e3,  1,2e9,0,0,1, "compacting interval") \
+% OPTION( compactlim,      1e2,  0,1e3,0,0,1, "inactive limit per mille") \
+% OPTION( compactmin,      1e2,  1,2e9,0,0,1, "minimum inactive limit") \
+\begin{tabular}{l|rrr}
+    Option & Default & Min & Max \\
+    \hline
+    \texttt{--compact}     & $1$    & $0$  & $1$ \\
+    \texttt{--compactint}  & $2000$ & $1$  & $2 \cdot 10^9$ \\
+    \texttt{--compactlim}  & $100$  & $0$  & $1000$ \\
+    \texttt{--compactmin}  & $100$  & $1$  & $2 \cdot 10^9$ \\
+\end{tabular}
+
+\subsection{Covered Clause Elimination}
+% OPTION( cover,             0,  0,  1,0,1,1, "covered clause elimination") \
+% OPTION( covermaxclslim,  1e5,  1,2e9,2,0,1, "maximum clause size") \
+% OPTION( covermaxeff,     1e8,  0,2e9,1,0,1, "maximum cover efficiency") \
+% OPTION( coverminclslim,    2,  2,2e9,0,0,1, "minimum clause size") \
+% OPTION( covermineff,     1e6,  0,2e9,1,0,1, "minimum cover efficiency") \
+% OPTION( coverreleff,       4,  1,1e5,1,0,1, "relative efficiency per mille") \
+\begin{tabular}{l|rrr}
+    Option & Default & Min & Max \\
+    \hline
+    \texttt{--cover}          & $0$    & $0$  & $1$ \\
+    \texttt{--covermaxclslim} & $10^5$ & $1$  & $2 \cdot 10^9$ \\
+    \texttt{--coverminclslim} & $2$    & $2$  & $2 \cdot 10^9$ \\
+    \texttt{--covermaxeff}    & $10^8$ & $0$  & $2 \cdot 10^9$ \\
+    \texttt{--covermineff}    & $10^6$ & $0$  & $2 \cdot 10^9$ \\
+    \texttt{--coverreleff}    & $4$    & $1$  & $2 \cdot 10^5$ \\
+\end{tabular}
+
+\subsection{Decompose}
+% OPTION( decompose,         1,  0,  1,0,1,1, "decompose BIG in SCCs and ELS") \
+% OPTION( decomposerounds,   2,  1, 16,1,0,1, "number of decompose rounds") \
+\begin{tabular}{l|rrr}
+    Option & Default & Min & Max \\
+    \hline
+    \texttt{--decompose}       & $1$  & $0$  & $1$ \\
+    \texttt{--decomposerounds} & $2$  & $1$  & $16$ \\    
+\end{tabular}
+
+\subsection{Deduplicate}
+% OPTION( deduplicate,       1,  0,  1,0,1,1, "remove duplicated binaries") \
+\begin{tabular}{l|rrr}
+    Option & Default & Min & Max \\
+    \hline
+    \texttt{--deduplicate} & $1$  & $0$  & $1$ \\
+\end{tabular}
+
+\subsection{Bounded Variable Elimination}
+% OPTION( elim,              1,  0,  1,0,1,1, "bounded variable elimination") \
+% OPTION( elimands,          1,  0,  1,0,0,1, "find AND gates") \
+% OPTION( elimaxeff,       2e9,  0,2e9,1,0,1, "maximum elimination efficiency") \
+% OPTION( elimbackward,      1,  0,  1,0,0,1, "eager backward subsumption") \
+% OPTION( elimboundmax,     16, -1,2e6,1,0,1, "maximum elimination bound") \
+% OPTION( elimboundmin,      0, -1,2e6,0,0,1, "minimum elimination bound") \
+% OPTION( elimclslim,      1e2,  2,2e9,2,0,1, "resolvent size limit") \
+% OPTION( elimequivs,        1,  0,  1,0,0,1, "find equivalence gates") \
+% OPTION( elimineff,       1e7,  0,2e9,1,0,1, "minimum elimination efficiency") \
+% OPTION( elimint,         2e3,  1,2e9,0,0,1, "elimination interval") \
+% OPTION( elimites,          1,  0,  1,0,0,1, "find if-then-else gates") \
+% OPTION( elimlimited,       1,  0,  1,0,0,1, "limit resolutions") \
+% OPTION( elimocclim,      1e2,  0,2e9,2,0,1, "occurrence limit") \
+% OPTION( elimprod,          1,  0,1e4,0,0,1, "elim score product weight") \
+% OPTION( elimreleff,      1e3,  1,1e5,1,0,1, "relative efficiency per mille") \
+% OPTION( elimrounds,        2,  1,512,1,0,1, "usual number of rounds") \
+% OPTION( elimsubst,         1,  0,  1,0,0,1, "elimination by substitution") \
+% OPTION( elimsum,           1,  0,1e4,0,0,1, "elimination score sum weight") \
+% OPTION( elimxorlim,        5,  2, 27,1,0,1, "maximum XOR size") \
+% OPTION( elimxors,          1,  0,  1,0,0,1, "find XOR gates") \
+\begin{tabular}{l|rrr}
+    Option & Default & Min & Max \\
+    \hline
+    \texttt{--elim}        & $1$    & $0$  & $1$ \\
+    \texttt{--elimands}    & $1$    & $0$  & $1$ \\
+    \texttt{--elimaxeff}   & $2 \cdot 10^9$ & $0$  & $2 \cdot 10^9$ \\
+    \texttt{--elimbackward}& $1$    & $0$  & $1$ \\
+    \texttt{--elimboundmax}& $16$   & $-1$ & $2 \cdot 10^6$ \\
+    \texttt{--elimboundmin}& $0$    & $-1$ & $2 \cdot 10^6$ \\
+    \texttt{--elimclslim}  & $100$  & $2$  & $2 \cdot 10^9$ \\
+    \texttt{--elimequivs}  & $1$    & $0$  & $1$ \\
+    \texttt{--elimineff}   & $10^7$ & $0$  & $2 \cdot 10^9$ \\
+    \texttt{--elimint}     & $2000$ & $1$  & $2 \cdot 10^9$ \\
+    \texttt{--elimites}    & $1$    & $0$  & $1$ \\
+    \texttt{--elimlimited} & $1$    & $0$  & $1$ \\
+    \texttt{--elimocclim}  & $100$  & $0$  & $2 \cdot 10^9$ \\
+    \texttt{--elimprod}    & $1$    & $0$  & $10^4$ \\
+    \texttt{--elimreleff}  & $1000$ & $1$  & $10^5$ \\
+    \texttt{--elimrounds}  & $2$    & $1$  & $512$ \\
+    \texttt{--elimsubst}   & $1$    & $0$  & $1$ \\
+    \texttt{--elimsum}     & $1$    & $0$  & $10^4$ \\
+    \texttt{--elimxorlim}  & $5$    & $2$  & $27$ \\
+    \texttt{--elimxors}    & $1$    & $0$  & $1$ \\
+\end{tabular}
+
+\subsection{Instantiation}
+% OPTION( instantiate,       0,  0,  1,0,1,1, "variable instantiation") \
+% OPTION( instantiateclslim, 3,  2,2e9,0,0,1, "minimum clause size") \
+% OPTION( instantiateocclim, 1,  1,2e9,2,0,1, "maximum occurrence limit") \
+% OPTION( instantiateonce,   1,  0,  1,0,0,1, "instantiate each clause once") \
+\begin{tabular}{l|rrr}
+    Option & Default & Min & Max \\
+    \hline
+    \texttt{--instantiate}       & $0$  & $0$  & $1$ \\
+    \texttt{--instantiateclslim} & $3$  & $2$  & $2 \cdot 10^9$ \\
+    \texttt{--instantiateocclim} & $1$  & $1$  & $2 \cdot 10^9$ \\
+    \texttt{--instantiateonce}   & $1$  & $0$  & $1$ \\
+\end{tabular}
+
+\subsection{Failed Literal Probing}
+% OPTION( probe,             1,  0,  1,0,1,1, "failed literal probing" ) \
+% OPTION( probehbr,          1,  0,  1,0,0,1, "learn hyper binary clauses") \
+% OPTION( probeint,        5e3,  1,2e9,0,0,1, "probing interval" ) \
+% OPTION( probemaxeff,     1e8,  0,2e9,1,0,1, "maximum probing efficiency") \
+% OPTION( probemineff,     1e6,  0,2e9,1,0,1, "minimum probing efficiency") \
+% OPTION( probereleff,      20,  1,1e5,1,0,1, "relative efficiency per mille") \
+% OPTION( proberounds,       1,  1, 16,1,0,1, "probing rounds" ) \
+\begin{tabular}{l|rrr}
+    Option & Default & Min & Max \\
+    \hline
+    \texttt{--probe}        & $1$    & $0$  & $1$ \\
+    \texttt{--probehbr}     & $1$    & $0$  & $1$ \\
+    \texttt{--probeint}     & $5000$ & $1$  & $2 \cdot 10^9$ \\
+    \texttt{--probemaxeff}  & $10^8$ & $0$  & $2 \cdot 10^9$ \\
+    \texttt{--probemineff}  & $10^6$ & $0$  & $2 \cdot 10^9$ \\
+    \texttt{--probereleff}  & $20$   & $1$  & $10^5$ \\
+    \texttt{--proberounds}  & $1$    & $1$  & $16$ \\
+\end{tabular}
+
+\subsection{Clause Subsumption}
+% OPTION( subsume,           1,  0,  1,0,1,1, "enable clause subsumption") \
+% OPTION( subsumebinlim,   1e4,  0,2e9,1,0,1, "watch list length limit") \
+% OPTION( subsumeclslim,   1e2,  0,2e9,2,0,1, "clause length limit") \
+% OPTION( subsumeint,      1e4,  1,2e9,0,0,1, "subsume interval") \
+% OPTION( subsumelimited,    1,  0,  1,0,0,1, "limit subsumption checks") \
+% OPTION( subsumemaxeff,   1e8,  0,2e9,1,0,1, "maximum subsuming efficiency") \
+% OPTION( subsumemineff,   1e6,  0,2e9,1,0,1, "minimum subsuming efficiency") \
+% OPTION( subsumeocclim,   1e2,  0,2e9,1,0,1, "watch list length limit") \
+% OPTION( subsumereleff,   1e3,  1,1e5,1,0,1, "relative efficiency per mille") \
+% OPTION( subsumestr,        1,  0,  1,0,0,1, "strengthen during subsume") \
+\begin{tabular}{l|rrr}
+    Option & Default & Min & Max \\
+    \hline
+    \texttt{--subsume}        & $1$    & $0$  & $1$ \\
+    \texttt{--subsumebinlim}  & $10^4$ & $0$  & $2 \cdot 10^9$ \\
+    \texttt{--subsumeclslim}  & $100$  & $0$  & $2 \cdot 10^9$ \\
+    \texttt{--subsumeint}     & $10^4$ & $1$  & $2 \cdot 10^9$ \\
+    \texttt{--subsumelimited} & $1$    & $0$  & $1$ \\
+    \texttt{--subsumemaxeff}  & $10^8$ & $0$  & $2 \cdot 10^9$ \\
+    \texttt{--subsumemineff}  & $10^6$ & $0$  & $2 \cdot 10^9$ \\
+    \texttt{--subsumeocclim}  & $100$  & $0$  & $2 \cdot 10^9$ \\
+    \texttt{--subsumereleff}  & $1000$ & $1$  & $10^5$ \\
+    \texttt{--subsumestr}     & $1$    & $0$  & $1$ \\
+\end{tabular}
+
+\subsection{Hyper Ternary Resolution}
+% OPTION( ternary,           1,  0,  1,0,1,1, "hyper ternary resolution") \
+% OPTION( ternarymaxadd,   1e3,  0,1e4,1,0,1, "max clauses added in percent") \
+% OPTION( ternarymaxeff,   1e8,  0,2e9,1,0,1, "ternary maximum efficiency") \
+% OPTION( ternarymineff,   1e6,  1,2e9,1,0,1, "minimum ternary efficiency") \
+% OPTION( ternaryocclim,   1e2,  1,2e9,2,0,1, "ternary occurrence limit") \
+% OPTION( ternaryreleff,    10,  1,1e5,1,0,1, "relative efficiency per mille") \
+% OPTION( ternaryrounds,     2,  1, 16,1,0,1, "maximum ternary rounds") \
+\begin{tabular}{l|rrr}
+    Option & Default & Min & Max \\
+    \hline
+    \texttt{--ternary}       & $1$    & $0$  & $1$ \\
+    \texttt{--ternarymaxadd} & $1000$ & $0$  & $10000$ \\
+    \texttt{--ternarymaxeff} & $10^8$ & $0$  & $2 \cdot 10^9$ \\
+    \texttt{--ternarymineff} & $10^6$ & $1$  & $2 \cdot 10^9$ \\
+    \texttt{--ternaryocclim} & $100$  & $1$  & $2 \cdot 10^9$ \\
+    \texttt{--ternaryreleff} & $10$   & $1$  & $10^5$ \\
+    \texttt{--ternaryrounds} & $2$    & $1$  & $16$ \\
+\end{tabular}
+
+\subsection{Transitive Reduction}
+% OPTION( transred,          1,  0,  1,0,1,1, "transitive reduction of BIG") \
+% OPTION( transredmaxeff,  1e8,  0,2e9,1,0,1, "maximum efficiency") \
+% OPTION( transredmineff,  1e6,  0,2e9,1,0,1, "minimum efficiency") \
+% OPTION( transredreleff,  1e2,  1,1e5,1,0,1, "relative efficiency per mille") \
+\begin{tabular}{l|rrr}
+    Option & Default & Min & Max \\
+    \hline
+    \texttt{--transred}       & $1$    & $0$  & $1$ \\
+    \texttt{--transredmaxeff} & $10^8$ & $0$  & $2 \cdot 10^9$ \\
+    \texttt{--transredmineff} & $10^6$ & $0$  & $2 \cdot 10^9$ \\
+    \texttt{--transredreleff} & $100$  & $1$  & $10^5$ \\
+\end{tabular}
+
+\subsection{Vivification}
+% OPTION( vivify,            1,  0,  1,0,1,1, "vivification") \
+% OPTION( vivifyinst,        1,  0,  1,0,0,1, "instantiate last literal when vivify") \
+% OPTION( vivifymaxeff,    2e7,  0,2e9,1,0,1, "maximum efficiency") \
+% OPTION( vivifymineff,    2e4,  0,2e9,1,0,1, "minimum efficiency") \
+% OPTION( vivifyonce,        0,  0,  2,0,0,1, "vivify once: 1=red, 2=red+irr") \
+% OPTION( vivifyredeff,     75,  0,1e3,1,0,1, "redundant efficiency per mille") \
+% OPTION( vivifyreleff,     20,  1,1e5,1,0,1, "relative efficiency per mille") \
+\begin{tabular}{l|rrr}
+    Option & Default & Min & Max \\
+    \hline
+    \texttt{--vivify}       & $1$    & $0$  & $1$ \\
+    \texttt{--vivifyinst}   & $1$    & $0$  & $1$ \\
+    \texttt{--vivifymaxeff} & $2 \cdot 10^7$ & $0$  & $2 \cdot 10^9$ \\
+    \texttt{--vivifymineff} & $2 \cdot 10^4$ & $0$  & $2 \cdot 10^9$ \\
+    \texttt{--vivifyonce}   & $0$    & $0$  & $2$ \\
+    \texttt{--vivifyredeff} & $75$   & $0$  & $1000$ \\
+    \texttt{--vivifyreleff} & $20$   & $1$  & $10^5$ \\
+\end{tabular}
+
+
+\end{document}

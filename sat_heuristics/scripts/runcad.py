@@ -4,11 +4,6 @@ import cadopt
 import time
 import pandas as pd
 
-def getcatopts(featrec):
-    d = cadopt.getoptdict(featrec)
-    return [ "{}={}".format(k, v) for k, v in d.items() ]
-
-#'clauseType': ['clauses', 'variables', 'cls1', 'cls2', 'cls3', 'cls4', 'cls5', 'cls6', 'cls7',  'cls8', 'cls9', 'cls10p', 'horn', 'invhorn', 'positive', 'negative']
 def rounds(featrec):
     ncls = featrec['clauses']
     nvars = featrec['variables']
@@ -30,10 +25,10 @@ def rounds(featrec):
 
 def getcommand(featrec, fin, fout):
     nrounds = rounds(featrec)
-    catopts = getcatopts(featrec)
+    cadopts = cadopt.getoptdict(featrec)
     command = [ './cadical/build/cadical', "-P{}".format(nrounds) ]
     ioparam = [ '-d', '0', '-o', fout, fin ]
-    return command + catopts + ioparam
+    return command + [ "{}={}".format(k, v) for k, v in cadopts.items() ] + ioparam
 
 def getfeatures(fin):
     data = pd.read_csv('feat.csv')

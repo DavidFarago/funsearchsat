@@ -35,6 +35,7 @@ def runcadical(fin):
     command = getcommand(featrec, fin, f'{fin}.out.cnf')
     start = time.perf_counter()
     result = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    # Runtime in seconds
     R = time.perf_counter() - start
 
     if result.returncode in [ 10, 20 ]:
@@ -42,9 +43,11 @@ def runcadical(fin):
         return 1 / R
     elif result.returncode == 0:
         print("Command executed successfully.")
-        szin = os.stat(fin).st_size
+        szin = os.stat(fin).st_size # Entpacken
         szout = os.stat(f'{fin}.out.cnf').st_size
-        Q = max(-1, (szin - szout) / szin)
+        assert(szin >= szout)
+        # Qualitaet: Relative Verkleinerung
+        Q = (szin - szout) / szin
         return Q / R
     else:
         print("Command failed with return code:", result.returncode)

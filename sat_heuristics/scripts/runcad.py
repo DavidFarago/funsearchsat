@@ -15,6 +15,7 @@ def rounds(featrec):
     ninvhorn = featrec['invhorn']
     npos = featrec['positive']
     nneg = featrec['negative']
+    
     return 0
 
 def getcommand(featrec, fin, fout):
@@ -30,6 +31,7 @@ def getfeatures(fin):
     return data.query('hash == @hash').iloc[0].to_dict()
 
 # run cadical with the given input file and feature record
+# fin: filename of _uncompressed_ input file
 def runcadical(fin):
     featrec = getfeatures(fin)
     command = getcommand(featrec, fin, f'{fin}.out.cnf')

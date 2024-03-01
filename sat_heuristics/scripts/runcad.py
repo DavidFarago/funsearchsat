@@ -44,7 +44,7 @@ def runcadical(fin):
         print("Command executed successfully.")
         szin = os.stat(fin).st_size
         szout = os.stat(f'{fin}.out.cnf').st_size
-        Q = max(-1, (szin - szout) / szout)
+        Q = max(-1, (szin - szout) / szin)
         return Q / R
     else:
         print("Command failed with return code:", result.returncode)

@@ -45,7 +45,7 @@ def runcadical(fin):
         print("Command executed successfully.")
         szin = os.stat(fin).st_size # Entpacken
         szout = os.stat(f'{fin}.out.cnf').st_size
-        assert(szin >= szout)
+        assert(szin >= szout, "Output file is larger than input file")
         # Qualitaet: Relative Verkleinerung
         Q = (szin - szout) / szin
         return Q / R

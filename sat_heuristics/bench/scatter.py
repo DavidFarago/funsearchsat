@@ -10,7 +10,7 @@ def scatter(files, cfunc, clabel):
     markers = [ 'x', '+', '.', '2', '4', '_' ]
     for i, file in enumerate(files):
         data = pd.read_csv(file, names=['hash', 'result', 'isize', 'osize', 'time'])
-        plt.scatter(data.iloc[:, 2], data.iloc[:, 3], marker=markers[i % len(markers)], label=file, c=cfunc(data.iloc[:, 2], data.iloc[:, 3], data.iloc[:, 4], data.iloc[:, 1]), cmap='plasma') #cmap='coolwarm')#cmap='gist_heat')
+        plt.scatter(data.iloc[:, 2], data.iloc[:, 3], marker=markers[i % len(markers)], label=file, c=cfunc(data.iloc[:, 2], data.iloc[:, 3], data.iloc[:, 4], data.iloc[:, 1]), cmap='plasma', linewidths=1) #cmap='coolwarm')#cmap='gist_heat')
 
     plt.colorbar(label=clabel, orientation='vertical')
     m = max(data.iloc[:, 2].max(), data.iloc[:, 3].max())
@@ -48,8 +48,8 @@ def score3(isize, osize, time, result):
     # change output size to 1 if instance is solved
     osize = np.where(result != "UNKNOWN", 1, osize)
     # set minimum to -1 and shift by 1 to get values between 0 and 2
-    reduction = (np.maximum(-1, (1 - (osize / isize))) + 1)
-    return reduction * np.log(isize) / (np.log(time + 1) + 1)
+    reduction = (np.maximum(-1, (1 - np.power((osize / isize), np.log(isize)))) + 1)
+    return reduction / (np.log(time + 1) + 1)
 
 def main():
     parser = argparse.ArgumentParser(description='Process CSV files.')

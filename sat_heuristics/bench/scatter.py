@@ -29,6 +29,12 @@ def relred(isize, osize, time, result):
     osize = np.where(result != "UNKNOWN", 1, osize)
     return (1 - (osize / isize))
 
+# nonrelative reduction speed
+def redspeed(isize, osize, time, result):
+    # change output size to 1 if instance is solved
+    osize = np.where(result != "UNKNOWN", 1, osize)
+    return (isize - osize) / time
+
 # score variant 1
 def score(isize, osize, time, result):
     # change output size to 1 if instance is solved
@@ -57,6 +63,7 @@ def main():
     args = parser.parse_args()
 
     scatter(args.files, relred, 'RelRed')
+    scatter(args.files, relred, 'RedSpeed')
     scatter(args.files, score, 'Score')
     scatter(args.files, score2, 'Score2')
     scatter(args.files, score3, 'Score3')

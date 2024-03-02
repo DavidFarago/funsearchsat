@@ -44,6 +44,13 @@ def score2(isize, osize, time, result):
     reduction = (np.maximum(-1, (1 - (osize / isize))) + 1)
     return reduction / (np.log(time + 1) + 1)
 
+def score3(isize, osize, time, result):
+    # change output size to 1 if instance is solved
+    osize = np.where(result != "UNKNOWN", 1, osize)
+    # set minimum to -1 and shift by 1 to get values between 0 and 2
+    reduction = (np.maximum(-1, (1 - (osize / isize))) + 1)
+    return reduction * np.log(isize) / (np.log(time + 1) + 1)
+
 def main():
     parser = argparse.ArgumentParser(description='Process CSV files.')
     parser.add_argument('files', nargs='+', help='CSV files to process')
@@ -52,6 +59,7 @@ def main():
     scatter(args.files, relred, 'RelRed')
     scatter(args.files, score, 'Score')
     scatter(args.files, score2, 'Score2')
+    scatter(args.files, score3, 'Score3')
 
 if __name__ == "__main__":
     main()

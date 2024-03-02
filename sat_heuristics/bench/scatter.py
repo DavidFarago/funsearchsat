@@ -4,6 +4,7 @@ import argparse
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+import math
 
 
 def scatter(files, cfunc, clabel):
@@ -41,6 +42,7 @@ def score(isize, osize, time, result):
     osize = np.where(result != "UNKNOWN", 1, osize)
     # set minimum to -1 and shift by 1 to get values between 0 and 2
     reduction = (np.maximum(-1, (1 - (osize / isize))) + 1)
+    # divide by runtime
     return reduction / (time + 1)
 
 def score2(isize, osize, time, result):
@@ -48,14 +50,19 @@ def score2(isize, osize, time, result):
     osize = np.where(result != "UNKNOWN", 1, osize)
     # set minimum to -1 and shift by 1 to get values between 0 and 2
     reduction = (np.maximum(-1, (1 - (osize / isize))) + 1)
-    return reduction / (np.log(time + 1) + 1)
+    # divide by log of runtime
+    return reduction / np.log(time + math.e)
 
 def score3(isize, osize, time, result):
     # change output size to 1 if instance is solved
     osize = np.where(result != "UNKNOWN", 1, osize)
     # set minimum to -1 and shift by 1 to get values between 0 and 2
-    reduction = (np.maximum(-1, (1 - np.power((osize / isize), np.log(isize)))) + 1)
-    return reduction / (np.log(time + 1) + 1)
+    # use log of input size as exponent of relative reduction (=increases relative reduction score for larger instances)
+    reduction = np.maximum(-1, (1 - np.power((osize / isize), np.log(isize)))) + 1
+    # calculate runtime score between 1 and 2
+    runtime = 2 - 1 / np.log(time + math.e)
+    # divide reduction by runtime score
+    return reduction / runtime
 
 def main():
     parser = argparse.ArgumentParser(description='Process CSV files.')
